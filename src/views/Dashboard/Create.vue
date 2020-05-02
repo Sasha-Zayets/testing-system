@@ -47,7 +47,7 @@
                     </v-col>
                 </v-row>
             </template>
-            <info-test v-else></info-test>
+            <info-test v-else @addDescription="setDescriptionTest"></info-test>
         </v-col>
     </v-row>
 </template>
@@ -60,6 +60,8 @@ import InfoTest from '@/components/CreateTest/InfoTest';
 export default {
     data: () => ({
         showQuestions: false,
+        name: '',
+        description: '',
         questions: [
             {
                 field: 'Питання?',
@@ -97,6 +99,11 @@ export default {
         },
         saveQuestion() {
             console.log(this.questions);
+        },
+        setDescriptionTest({ name, description }) {
+            this.name = name;
+            this.description = description;
+            this.showQuestions = true;
         }
     },
     components: {

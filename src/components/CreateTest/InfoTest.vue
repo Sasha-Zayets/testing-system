@@ -29,6 +29,8 @@ export default {
         created() {
             const validForm = this.$refs.form.validate();
             if(validForm) {
+                const name = this.name;
+                const description = this.description;
                 this.$emit('addDescription', {name, description})
             }
         }

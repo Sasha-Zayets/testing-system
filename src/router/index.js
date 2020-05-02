@@ -16,6 +16,7 @@ import Create from '@/views/Dashboard/Create';
 import Settings from '@/views/Dashboard/Settings';
 import Help from '@/views/Dashboard/Help';
 import SendFeedback from '@/views/Dashboard/SendFeedback';
+import Result from '@/views/Dashboard/Result';
 
 Vue.use(VueRouter)
 
@@ -70,6 +71,11 @@ const routes = [
                 name: 'help',
                 component: Help
             },
+            {
+                path: 'result',
+                name: 'result-test',
+                component: Result
+            }
         ]
     }
 ]
