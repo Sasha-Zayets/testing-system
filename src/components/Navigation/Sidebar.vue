@@ -61,7 +61,7 @@ export default {
             { icon: 'mdi-plus-circle-outline', text: 'Cтворити тест', name: 'create-test' },
             { icon: 'mdi-account-cog-outline', text: 'Налаштування', name: 'settings' },
             { icon: 'mdi-message', text: 'Надіслати відгук', name: 'send-feedback' },
-            { icon: 'mdi-help-circle', text: 'Допомога', name: 'help' },
+            // { icon: 'mdi-help-circle', text: 'Допомога', name: 'help' },
         ],
     })
 }

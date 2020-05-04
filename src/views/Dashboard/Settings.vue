@@ -4,7 +4,7 @@
             <title-dashboard>Налаштування</title-dashboard>
             <v-card class="pa-2">
                 <v-row>
-                    <v-col md="6" class="justify-center d-flex">
+                    <v-col md="6" class="justify-center align-center d-flex">
                         <v-avatar
                             size="125">
                             <img
