@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 // layouts
 import Auth from '@/layouts/Auth';
 import Dashboard from '@/layouts/Dashboard';
-
+import Passing from '@/layouts/Passing';
 // Auth page
 import Login from '@/views/Login';
 import Registration from '@/views/Registration';
@@ -17,6 +17,10 @@ import Settings from '@/views/Dashboard/Settings';
 import Help from '@/views/Dashboard/Help';
 import SendFeedback from '@/views/Dashboard/SendFeedback';
 import Result from '@/views/Dashboard/Result';
+
+// Passing page
+import PassingTest from '@/views/Passing/Test';
+import ResultTest from '@/views/Passing/Result';
 
 Vue.use(VueRouter)
 
@@ -75,6 +79,22 @@ const routes = [
                 path: 'result',
                 name: 'result-test',
                 component: Result
+            }
+        ]
+    },
+    {
+        path: '/passing',
+        component: Passing,
+        children: [
+            {
+                path: ':id',
+                name: 'passing-test',
+                component: PassingTest
+            },
+            {
+                path: 'result/:id',
+                name: 'result-test',
+                component: ResultTest
             }
         ]
     }
