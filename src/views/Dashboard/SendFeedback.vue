@@ -6,35 +6,47 @@
                 <v-col md="8">
                     <v-card class="pa-3 mb-3">
                         <h2 class="title mb-2">Залишити відгук</h2>
-                        <v-text-field 
-                            v-model="name"
-                            label="Ім'я"
-                            ></v-text-field>
-                        <v-textarea
-                            v-model="reviews" 
-                            label="Текст відгуку"
-                            rows="2"
-                            ></v-textarea>
-                        <v-switch
-                            v-model="showName"
-                            label="Не показувати ім'я на сайті"
-                            ></v-switch>
-                        <v-btn color="primary">Відправити</v-btn>
+                        <v-form ref="form">
+                            <v-text-field 
+                                v-model="name"
+                                :rules="[rules.required]"
+                                label="Ім'я"
+                                ></v-text-field>
+                            <v-textarea
+                                v-model="description" 
+                                :rules="[rules.required, rules.counter]"
+                                label="Текст відгуку"
+                                rows="2"
+                                ></v-textarea>
+                            <v-switch
+                                v-model="showOnSite"
+                                label="Не показувати ім'я на сайті"
+                                ></v-switch>
+                            <v-btn 
+                                @click="sendResponse"
+                                color="primary"
+                                >
+                                Відправити
+                            </v-btn>
+                        </v-form>
                     </v-card>
-                    <v-card class="pa-2 mt-2">
+                    <v-card class="pa-2 mt-2" v-if="reviews.length > 0">
                         <h2 class="headline mb-2">Останні відгуки:</h2>
                         <v-list three-line>
-                            <template v-for="item in items">
+                            <template v-for="(item, index) in reviews">
                                 <v-list-item
-                                    :key="item.title"
+                                    v-if="item.showOnSite === true"
+                                    :key="index"
                                     >
                                     <v-list-item-avatar>
-                                        <v-img :src="item.avatar"></v-img>
+                                        <v-img 
+                                            src="https://image.flaticon.com/icons/svg/1738/1738691.svg"
+                                            ></v-img>
                                     </v-list-item-avatar>
 
                                     <v-list-item-content>
-                                        <v-list-item-title v-html="item.title"></v-list-item-title>
-                                        <v-list-item-subtitle v-html="item.subtitle"></v-list-item-subtitle>
+                                        <v-list-item-title v-html="item.name"></v-list-item-title>
+                                        <v-list-item-subtitle v-html="item.description"></v-list-item-subtitle>
                                     </v-list-item-content>
                                 </v-list-item>
                             </template>
@@ -47,25 +59,43 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import TitleDashboard from '@/components/TitleDashboard';
+
 export default {
     data: () => ({
         name: '',
-        reviews: '',
-        showName: false,
-        items: [
-            {
-                avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-                title: 'Brunch this weekend?',
-                subtitle: "<span class='text--primary'>Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?",
-            },
-            {
-                avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-                title: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
-                subtitle: "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend.",
-            },
-        ],
+        description: '',
+        showOnSite: false,
+        items: [],
+        rules: {
+            required: value => !!value || 'Поле обов\'язкове',
+            counter: value => value.length >= 6 || 'Мінімум 6 символів',
+        }
     }),
+    computed: {
+        ...mapGetters('reviews', ['reviews']),
+    },
+    created() {
+        this.getReviews();
+    },
+    methods: {
+        ...mapActions('reviews', ['addResponse', 'getReviews']),
+        sendResponse() {
+            const form = this.$refs.form;
+            if(form.validate()) {
+                const { name, description, showOnSite } = this;
+                this.addResponse({
+                    name,
+                    description,
+                    showOnSite
+                }).then(() => {
+                    form.reset();
+                    form.resetValidation();
+                });
+            }
+        }
+    },
     components: {
         TitleDashboard
     }
