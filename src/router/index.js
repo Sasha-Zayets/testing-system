@@ -6,8 +6,8 @@ import Auth from '@/layouts/Auth';
 import Dashboard from '@/layouts/Dashboard';
 import Passing from '@/layouts/Passing';
 // Auth page
-import Login from '@/views/Login';
-import Registration from '@/views/Registration';
+import Login from '@/views/Auth/Login';
+import Registration from '@/views/Auth/Registration';
 
 // Dashboard page
 import Welcome from '@/views/Dashboard/Welcome';
@@ -28,6 +28,9 @@ const routes = [
     {
         path: '/auth',
         component: Auth,
+        meta: {
+            requiresAuth: false
+        },
         children: [
             {
                 path: 'login',
@@ -44,6 +47,9 @@ const routes = [
     {
         path: '/dashboard',
         component: Dashboard,
+        meta: {
+            requiresAuth: true
+        },
         children: [
             {
                 path: '',
@@ -93,7 +99,7 @@ const routes = [
             },
             {
                 path: 'result/:id',
-                name: 'result-test',
+                name: 'result',
                 component: ResultTest
             }
         ]
@@ -104,6 +110,22 @@ const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes
+});
+
+router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem('token');
+    
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if(token) 
+            next();
+        else 
+            next({ name: 'login' });
+    } else {
+        if(token) 
+            next({ name: 'welcome' });
+        else 
+            next();
+    }
 })
 
-export default router
+export default router;

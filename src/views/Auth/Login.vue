@@ -14,15 +14,15 @@
                     dark
                     flat
                 >
-                    <v-toolbar-title>Реєстрація</v-toolbar-title>
+                    <v-toolbar-title>Вхід до системи</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
-                    <v-form>
+                    <v-form ref="authForm">
                         <v-text-field
                             label="Логін"
                             name="login"
                             v-model="login"
-                            :rules="[rules.required, rules.counter]"
+                            :rules="[rules.required]"
                             prepend-icon="mdi-account"
                             type="text"
                         />
@@ -32,25 +32,21 @@
                             v-model="password"
                             label="Пароль"
                             name="password"
+                            prepend-icon="mdi-lock-question"
                             :rules="[rules.required, rules.counter]"
-                            prepend-icon="mdi-lock-question"
-                            type="password"
-                        />
-                        <v-text-field
-                            id="confirmPassword"
-                            v-model="confirmPassword"
-                            label="Повторіть пароль"
-                            name="password"
-                            :rules="[rules.required, rules.confirm(password)]"
-                            prepend-icon="mdi-lock-question"
                             type="password"
                         />
                     </v-form>
                 </v-card-text>
                 <v-card-actions>
-                    <router-link :to="{name: 'login'}">Вхід до системи</router-link>
+                    <router-link :to="{name: 'registration'}">Реєстрація</router-link>
                     <v-spacer />
-                    <v-btn color="primary">Реєстрація</v-btn>
+                    <v-btn 
+                        @click="authentication"
+                        color="primary"
+                        >
+                        Увійти
+                    </v-btn>
                 </v-card-actions>
             </v-card>
         </v-col>
@@ -58,16 +54,28 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
     data: () => ({
         login: '',
         password: '',
-        confirmPassword: '',
         rules: {
             required: value => !!value || 'Поле обов\'язкове',
             counter: value => value.length >= 6 || 'Мінімум 6 символів',
-            confirm: password => value => value === password || 'Паролі не співпадають',
         }
-    })
+    }),
+    methods: {
+        ...mapActions('auth', ['loginUser']),
+        authentication() {
+            const authForm = this.$refs.authForm;
+            if(authForm.validate()) {
+                const { login, password } = this;
+                this.loginUser({ login, password })
+                    .then(() => {
+                        this.$router.push({ name: 'welcome' });
+                    });
+            }
+        }
+    }
 }
 </script>
