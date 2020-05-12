@@ -14,14 +14,23 @@
                         </v-avatar>
                     </v-col>
                     <v-col md="6">
-                        <v-text-field 
+                        <v-text-field
+                            v-model="settings.name" 
                             label="Ім'я" />
                         <v-text-field 
+                            v-model="settings.lastName"
                             label="Прізвище" />
-                        <v-textarea 
+                        <v-textarea
+                            v-model="settings.description" 
                             rows="2"
                             label="Опис" />
-                        <v-btn color="success">Зберегти</v-btn>
+                        <v-btn
+                            @click="saveSettings" 
+                            :loading="loading"
+                            color="success"
+                            >
+                            Зберегти
+                        </v-btn>
                     </v-col>
                 </v-row>
             </v-card>
@@ -30,8 +39,22 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import TitleDashboard from '@/components/TitleDashboard';
+
 export default {
+    computed: {
+        ...mapGetters('settings', ['settings', 'loading']),
+    },
+    created() {
+        this.getSettings();
+    },
+    methods: {
+        ...mapActions('settings', ['getSettings', 'updateSettings']),
+        saveSettings() {
+            this.updateSettings(this.settings);
+        }
+    },
     components: {
         TitleDashboard
     }
