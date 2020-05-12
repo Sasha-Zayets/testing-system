@@ -50,7 +50,8 @@
                 <v-card-actions>
                     <router-link :to="{name: 'login'}">Вхід до системи</router-link>
                     <v-spacer />
-                    <v-btn 
+                    <v-btn
+                        :loading="loading" 
                         @click="send"
                         color="primary"
                         >
@@ -63,7 +64,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
     data: () => ({
@@ -76,6 +77,9 @@ export default {
             confirm: password => value => value === password || 'Паролі не співпадають',
         }
     }),
+    computed: {
+        ...mapGetters('auth', ['loading'])
+    },
     methods: {
         ...mapActions('auth', ['registration']),
         send() {

@@ -10,7 +10,10 @@ const getters = {
 
 const mutations = {
     setReviews(state, payload) {
-        state.reviews = [...state.reviews, ...payload];
+        state.reviews = [...payload];
+    },
+    setNewResponse(state, payload) {
+        state.reviews.unshift(payload);
     }
 }
 
@@ -23,12 +26,25 @@ const actions = {
                 showOnSite 
             });
             if(result.status === 200) {
-                console.log(result);
-                commit('setReviews', {...result.data});
+                commit('setNewResponse', {
+                    name,
+                    description,
+                    showOnSite
+                });
+                commit('global/setSnackbarOptions', {
+                    type: 'success',
+                    show: true,
+                    message: 'Відгук успішно додано'
+                }, { root: true });
                 return result;
             }
         } catch(error) {
             console.log(error);
+            commit('global/setSnackbarOptions', {
+                type: 'error',
+                show: true,
+                message: 'Сталась помилка при відправленні відгуку'
+            }, { root: true });
         }
     },
     async getReviews({ commit }) {
@@ -41,6 +57,11 @@ const actions = {
             }
         } catch(error) {
             console.log(error);
+            commit('global/setSnackbarOptions', {
+                type: 'error',
+                show: true,
+                message: 'Сталась помилка при завантаженні відгуку'
+            }, { root: true });
         }
     }
 }

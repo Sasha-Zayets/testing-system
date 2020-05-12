@@ -43,6 +43,7 @@
                     <v-spacer />
                     <v-btn 
                         @click="authentication"
+                        :loading="loading"
                         color="primary"
                         >
                         Увійти
@@ -54,7 +55,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters} from 'vuex';
 export default {
     data: () => ({
         login: '',
@@ -64,6 +65,9 @@ export default {
             counter: value => value.length >= 6 || 'Мінімум 6 символів',
         }
     }),
+    computed: {
+        ...mapGetters('auth', ['loading'])
+    },
     methods: {
         ...mapActions('auth', ['loginUser']),
         authentication() {

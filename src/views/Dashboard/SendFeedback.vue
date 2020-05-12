@@ -14,13 +14,13 @@
                                 ></v-text-field>
                             <v-textarea
                                 v-model="description" 
-                                :rules="[rules.required, rules.counter]"
+                                :rules="[rules.required]"
                                 label="Текст відгуку"
                                 rows="2"
                                 ></v-textarea>
                             <v-switch
                                 v-model="showOnSite"
-                                label="Не показувати ім'я на сайті"
+                                label="Показувати відгук на сайті"
                                 ></v-switch>
                             <v-btn 
                                 @click="sendResponse"
@@ -30,7 +30,7 @@
                             </v-btn>
                         </v-form>
                     </v-card>
-                    <v-card class="pa-2 mt-2" v-if="reviews.length > 0">
+                    <v-card class="pa-2 mt-2" v-if="reviews && reviews.length > 0">
                         <h2 class="headline mb-2">Останні відгуки:</h2>
                         <v-list three-line>
                             <template v-for="(item, index) in reviews">
@@ -52,6 +52,7 @@
                             </template>
                         </v-list>
                     </v-card>
+                    <h2 class="heading" v-else>Відгуків немає :(</h2>
                 </v-col>
             </v-row>
         </v-col>
@@ -90,8 +91,8 @@ export default {
                     description,
                     showOnSite
                 }).then(() => {
-                    form.reset();
                     form.resetValidation();
+                    form.reset();
                 });
             }
         }

@@ -34,8 +34,11 @@
 				/>
 			</v-avatar>
 		</router-link>
-		<v-btn icon>
-            <v-icon>mdi-exit-to-app</v-icon>
+		<v-btn 
+			@click="logOutUser"
+			icon
+			>
+            	<v-icon>mdi-exit-to-app</v-icon>
         </v-btn>
     </v-app-bar>
     <v-content>
@@ -43,11 +46,24 @@
             <router-view />
         </v-container>
     </v-content>
+	<v-snackbar
+		:color="snackbarOptions.type"
+		v-model="snackbarOptions.show"
+		>
+		{{ snackbarOptions.message }}
+		<v-btn
+			color="white"
+			text
+			@click="fadeSnackbar"
+		>
+			Закрити
+		</v-btn>
+	</v-snackbar>
   </v-app>
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations, mapActions, mapGetters } from 'vuex';
 import Sidebar from '@/components/Navigation/Sidebar';
 
 export default {
@@ -58,6 +74,9 @@ export default {
         dialog: false,
         drawer: true,
 	}),
+	computed: {
+		...mapGetters('global', ['snackbarOptions']),
+	},
 	created() {
 		const token = localStorage.getItem('token');
 
@@ -65,6 +84,14 @@ export default {
 	},
 	methods: {
 		...mapMutations('auth', ['setToken']),
+		...mapActions('auth', ['logOut']),
+		...mapActions('global', ['fadeSnackbar']),
+		logOutUser() {
+			this.logOut()
+				.then(() => {
+					this.$router.push({ name: 'login' });
+				});
+		}
 	},
     components: {
         Sidebar

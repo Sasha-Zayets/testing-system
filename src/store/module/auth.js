@@ -21,6 +21,8 @@ const mutations = {
 const actions = {
     async loginUser({ commit }, { login, password }) {
         try {
+            commit('setLoading', true);
+
             const result = await axios.post('/api/login/', {
                 login,
                 password
@@ -30,22 +32,29 @@ const actions = {
 
                 localStorage.setItem('token', token);
                 commit('setToken', token);
-                return result;
             }
+            commit('setLoading', false);
+            return result;
         } catch(error) {
+            commit('setLoading', false);
             console.log(error);
         }
     },
     async registration({ commit }, { login, password }) {
         try {
+            commit('setLoading', true);
+
             const result = await axios.post('/api/registration/', {
                 login,
                 password
             });
+
+            commit('setLoading', false);
             if(result.status === 200) {
                 return result;
             }
         } catch(error) {
+            commit('setLoading', false);
             console.log(error);
         }
     },
