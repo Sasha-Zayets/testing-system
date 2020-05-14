@@ -70,6 +70,10 @@ export default {
             }
         ]
     }),
+    created() {
+        const { id } = this.$route.params;
+        console.log(id);
+    },
     methods: {
         sendTest() {
             const id = this.$route.params.id;

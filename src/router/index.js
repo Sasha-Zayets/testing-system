@@ -91,6 +91,10 @@ const routes = [
     {
         path: '/passing',
         component: Passing,
+        meta: {
+            requiresAuth: false,
+            openUsers: true
+        },
         children: [
             {
                 path: ':id',
@@ -121,10 +125,14 @@ router.beforeEach((to, from, next) => {
         else 
             next({ name: 'login' });
     } else {
-        if(token) 
-            next({ name: 'welcome' });
-        else 
+        if(to.matched.some(record => record.meta.openUsers)) {
             next();
+        } else {
+            if(token) 
+                next({ name: 'welcome' });
+            else 
+                next();
+        }
     }
 })
 

@@ -19,7 +19,9 @@
                             rows="1"
                             ></v-textarea>
                         <v-divider></v-divider>
-                        <p class="subtitle-1 font-weight-medium mt-3">Відповідь:</p>
+                        <div class="d-flex">
+                            <p class="subtitle-1 font-weight-medium mt-3">Відповіді:</p>
+                        </div>
                         <answers 
                             :question="question" 
                             @removeAnswer="removeAnswers" />
@@ -44,6 +46,7 @@
                             <v-icon left>mdi-content-save</v-icon>
                             Зберегти
                         </v-btn>
+                       
                     </v-col>
                 </v-row>
             </template>
@@ -53,6 +56,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import TitleDashboard from '@/components/TitleDashboard';
 import Answers from '@/components/CreateTest/Answers';
 import InfoTest from '@/components/CreateTest/InfoTest';
@@ -65,17 +69,17 @@ export default {
         questions: [
             {
                 field: 'Питання?',
+                value: 0,
                 answers: [
                     {
-                        value: '',
-                        correct: false
+                        value: ''
                     }
-                ],
-                rightAnswer: ''
+                ]
             }
         ]
     }),
     methods: {
+        ...mapActions('questions', ['saveQuestions']),
         addAnswer(question) {
             question.answers.push({
                 value: '',
@@ -93,12 +97,21 @@ export default {
         addQuestion() {
             this.questions.push({
                 field: '',
+                value: 0,
                 answers: [{ value: '', correct: false }],
                 rightAnswer: ''
             })
         },
         saveQuestion() {
-            console.log(this.questions);
+            const data = {
+                name: this.name,
+                description: this.description,
+                questions: this.questions
+            }
+            this.saveQuestions(data)
+                .finally(() => {
+                    this.$router.push({ name: 'list-test' });
+                });
         },
         setDescriptionTest({ name, description }) {
             this.name = name;

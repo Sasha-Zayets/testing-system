@@ -1,5 +1,4 @@
 import axios from '@/plugins/axios';
-const token = localStorage.getItem('token');
 
 const state = {
     settings: {
@@ -27,8 +26,9 @@ const mutations = {
 }
 
 const actions = {
-    async getSettings({ commit }) {
+    async getSettings({ commit, rootState }) {
         try {
+            const { token } = rootState.auth;
             const result = await axios.post('/api/all-settings/', {
                 token
             });
@@ -46,10 +46,11 @@ const actions = {
             }, { root: true });
         }
     },
-    async updateSettings({ commit }, payload) {
+    async updateSettings({ commit, rootState }, payload) {
         try {
             commit('setLoading', true);
-
+            
+            const { token } = rootState.auth;
             const result = await axios.put('/api/update-settings', {
                 token,
                 ...payload
