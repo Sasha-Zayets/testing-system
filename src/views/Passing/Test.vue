@@ -6,10 +6,25 @@
                 dark
                 class="mb-3"
             >
-                <v-card-title class="headline">Назва тесту</v-card-title>
+                <v-card-title class="headline">{{ nameTest }}</v-card-title>
 
                 <v-card-subtitle>
-                    Опис
+                    {{ descriptionTest }}
+                </v-card-subtitle>
+            </v-card>
+
+            <v-card
+                class="mb-3"
+            >
+                <v-card-title class="headline">
+                    Введіть ваше ім'я
+                </v-card-title>
+
+                <v-card-subtitle>
+                    <v-text-field 
+                        v-model="name"
+                        label="Ім'я"
+                        />
                 </v-card-subtitle>
             </v-card>
             
@@ -19,14 +34,16 @@
                 class="mb-3"
                 >
                 <v-card-title class="headline pb-0">
-                    {{ question.name }}
+                    {{ question.field }}
                 </v-card-title>
                 <v-card-actions>
-                    <v-radio-group>
+                    <v-radio-group
+                        v-model="question.rightAnswer"
+                        >
                         <v-radio
-                            v-for="(item, index) in question.data"
+                            v-for="(item, index) in question.answers"
                             :key="index"
-                            :label="item.label">
+                            :label="item.value">
                         </v-radio>
                     </v-radio-group>
                 </v-card-actions>
@@ -35,7 +52,8 @@
                 dark
                 color="purple"
                 class="mt-3"
-                @click="sendTest">
+                @click="sendTest"
+                >
                 Надіслати
             </v-btn>
         </v-col>
@@ -43,42 +61,29 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
     data: () => ({
-        questions: [
-            {
-                name: 'Імя питання??',
-                data: [
-                    {
-                        label: 'Відповідь 1',
-                    },
-                    {
-                        label: 'Відповідь 2',
-                    }
-                ]
-            },
-            {
-                name: 'Імя питання??',
-                data: [
-                    {
-                        label: 'Відповідь 1',
-                    },
-                    {
-                        label: 'Відповідь 2',
-                    }
-                ]
-            }
-        ]
+        name: ''
     }),
+    computed: {
+        ...mapGetters('passing', [
+            'nameTest',
+            'descriptionTest',
+            'questions'
+        ])
+    },
     created() {
         const { id } = this.$route.params;
-        console.log(id);
+        this.getTest(id);
     },
     methods: {
+        ...mapActions('passing', ['getTest']),
         sendTest() {
             const id = this.$route.params.id;
-
-            this.$router.push(`/passing/result/${id}`);
+            console.log(this.questions);
+            // this.$router.push(`/passing/result/${id}`);
         }
     }
 }
