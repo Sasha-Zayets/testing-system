@@ -2,10 +2,12 @@ import axios from '@/plugins/axios';
 
 const state = {
     listTest: [],
+    resultTest: [],
 }
 
 const getters = {
     listTest: state => state.listTest,
+    resultTest: state => state.resultTest,
 }
 
 const mutations = {
@@ -18,6 +20,9 @@ const mutations = {
         });
 
         state.listTest = newTest;
+    },
+    setResultTest(state, payload) {
+        state.resultTest = payload;
     }
 }
 
@@ -87,6 +92,17 @@ const actions = {
                 show: true,
                 message: 'Сталась помилка при видаленні тесту'
             }, { root: true });
+        }
+    },
+    async getResultTest({ commit }, id) {
+        try {
+            const result = await axios.get(`/api/result-test/${id}`);
+            
+            if(result.status === 200) {
+                commit('setResultTest', result.data);
+            }
+        } catch(error) {
+            console.log(error);
         }
     }
 }

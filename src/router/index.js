@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import Auth from '@/layouts/Auth';
 import Dashboard from '@/layouts/Dashboard';
 import Passing from '@/layouts/Passing';
+
 // Auth page
 import Login from '@/views/Auth/Login';
 import Registration from '@/views/Auth/Registration';
@@ -22,9 +23,20 @@ import Result from '@/views/Dashboard/Result';
 import PassingTest from '@/views/Passing/Test';
 import ResultTest from '@/views/Passing/Result';
 
+import Home from '@/views/Home';
+import PageNotFound from '@/views/PageNotFound';
+
 Vue.use(VueRouter)
 
 const routes = [
+    {
+        path: '',
+        name: 'home',
+        component: Home,
+        meta: {
+            openUsers: true
+        }
+    },
     {
         path: '/auth',
         component: Auth,
@@ -82,7 +94,7 @@ const routes = [
                 component: Help
             },
             {
-                path: 'result',
+                path: 'result/:id',
                 name: 'result-test',
                 component: Result
             }
@@ -107,6 +119,10 @@ const routes = [
                 component: ResultTest
             }
         ]
+    },
+    {
+        path: '*',
+        component: PageNotFound
     }
 ]
 

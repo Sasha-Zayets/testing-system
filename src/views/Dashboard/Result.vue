@@ -6,7 +6,6 @@
                 <v-simple-table
                     :dense="dense"
                     :fixed-header="fixedHeader"
-                    :height="height"
                     >
                     <template v-slot:default>
                         <thead>
@@ -16,10 +15,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in desserts" :key="item.name">
-                                <td>{{ item.name }}</td>
-                                <td>{{ item.calories }}</td>
-                            </tr>
+                            <template v-if="resultTest.length > 0">
+                                <tr 
+                                    v-for="item in resultTest" 
+                                    :key="item.name_user"
+                                    >
+                                    <td>{{ item.name_user }}</td>
+                                    <td>{{ item.scores }}</td>
+                                </tr>
+                            </template>
+                            <h2 
+                                class="subtitle-1 pa-3" 
+                                v-else
+                                >
+                                Тест не пройшов жоден з користувачів
+                            </h2>
                         </tbody>
                     </template>
                 </v-simple-table>
@@ -29,19 +39,24 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'; 
 import TitleDashboard from '@/components/TitleDashboard';
 export default {
     data: () => ({
         dense: false,
         fixedHeader: false,
-        height: 300,
-        desserts: [
-            {
-                name: 'Frozen Yogurt',
-                calories: 10,
-            },
-        ]
     }),
+    computed: {
+        ...mapGetters('questions', ['resultTest'])
+    },
+    created() {
+        const { id } = this.$route.params;
+
+        this.getResultTest(id);
+    },
+    methods: {
+        ...mapActions('questions', ['getResultTest']),
+    },
     components: {
         TitleDashboard
     }

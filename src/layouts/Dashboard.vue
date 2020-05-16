@@ -89,7 +89,7 @@ export default {
 		logOutUser() {
 			this.logOut()
 				.then(() => {
-					this.$router.push({ name: 'login' });
+					this.$router.push({ name: 'home' });
 				});
 		}
 	},
