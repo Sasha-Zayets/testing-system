@@ -109,6 +109,7 @@ const actions = {
 
             const result = await axios.get(`/api/result-test/${id}`);
             
+            console.log(result);
             if(result.status === 200) {
                 commit('setResultTest', result.data);
                 commit('setLoadContent', false);

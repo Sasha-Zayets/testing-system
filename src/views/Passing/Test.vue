@@ -51,6 +51,7 @@
             <v-btn
                 dark
                 color="purple"
+                :loading="loading"
                 class="mt-3"
                 @click="sendTest"
                 >
@@ -71,7 +72,8 @@ export default {
         ...mapGetters('passing', [
             'nameTest',
             'descriptionTest',
-            'questions'
+            'questions',
+            'loading'
         ])
     },
     created() {
@@ -79,11 +81,19 @@ export default {
         this.getTest(id);
     },
     methods: {
-        ...mapActions('passing', ['getTest']),
+        ...mapActions('passing', ['getTest', 'sendResultTest']),
         sendTest() {
             const id = this.$route.params.id;
-            console.log(this.questions);
-            // this.$router.push(`/passing/result/${id}`);
+            const data = {
+                id,
+                name: this.name,
+                questions: this.questions
+            }
+            
+            this.sendResultTest(data)
+                .then(() => {
+                    this.$router.push({ name: 'send-test' });
+                });
         }
     }
 }

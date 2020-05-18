@@ -2,17 +2,17 @@
     <v-card
         class="mb-3"
     >
-        <v-card-title class="headline">Назва тесту</v-card-title>
-
-        <v-card-subtitle>
-            Опис
-        </v-card-subtitle>
+        <v-card-title class="headline">
+            Тест пройдено, результати були надіслані
+        </v-card-title>
+       
         <v-card-actions>
-            <router-link 
-                :to="{name: 'passing-test', params: { id: $route.params.id }}"
+            <a
+                href="#"
+                @click.prevent="$router.go(-1)"
                 >
                 Пройти ще раз
-            </router-link>
+            </a>
         </v-card-actions>
     </v-card>
 </template>

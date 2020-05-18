@@ -114,8 +114,8 @@ const routes = [
                 component: PassingTest
             },
             {
-                path: 'result/:id',
-                name: 'result',
+                path: 'result',
+                name: 'send-test',
                 component: ResultTest
             }
         ]
