@@ -1,6 +1,7 @@
 import axios from '@/plugins/axios';
 
 const state = {
+    name: '',
     listTest: [],
     resultTest: [],
     loadContent: false,
@@ -10,6 +11,7 @@ const getters = {
     listTest: state => state.listTest,
     resultTest: state => state.resultTest,
     loadContent: state => state.loadContent,
+    name: state => state.name,
 }
 
 const mutations = {
@@ -28,6 +30,9 @@ const mutations = {
     },
     setLoadContent(state, payload) {
         state.loadContent = payload;
+    },
+    setName(state, payload) {
+        state.name = payload;
     }
 }
 
@@ -109,9 +114,11 @@ const actions = {
 
             const result = await axios.get(`/api/result-test/${id}`);
             
-            console.log(result);
             if(result.status === 200) {
-                commit('setResultTest', result.data);
+                const { name, questions } = result.data;
+                
+                commit('setName', name);
+                commit('setResultTest', questions);
                 commit('setLoadContent', false);
             }
         } catch(error) {

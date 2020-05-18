@@ -1,7 +1,7 @@
 <template>
     <v-row>
         <v-col md="12">
-            <title-dashboard>Результати проходження тесту: "Назва тесту"</title-dashboard>
+            <title-dashboard>Результати проходження тесту: {{ name }}</title-dashboard>
             <v-progress-linear
                 v-if="loadContent"
                 indeterminate
@@ -56,7 +56,11 @@ export default {
         fixedHeader: false,
     }),
     computed: {
-        ...mapGetters('questions', ['resultTest', 'loadContent'])
+        ...mapGetters('questions', [
+            'resultTest', 
+            'loadContent',
+            'name'
+        ])
     },
     created() {
         const { id } = this.$route.params;
