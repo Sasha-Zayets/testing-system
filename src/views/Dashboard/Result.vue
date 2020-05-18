@@ -2,7 +2,16 @@
     <v-row>
         <v-col md="12">
             <title-dashboard>Результати проходження тесту: "Назва тесту"</title-dashboard>
-            <v-card class="pa-2">
+            <v-progress-linear
+                v-if="loadContent"
+                indeterminate
+                color="primary"
+                class="mt-3"
+                ></v-progress-linear>
+            <v-card 
+                v-else
+                class="pa-2"
+                >
                 <v-simple-table
                     :dense="dense"
                     :fixed-header="fixedHeader"
@@ -47,7 +56,7 @@ export default {
         fixedHeader: false,
     }),
     computed: {
-        ...mapGetters('questions', ['resultTest'])
+        ...mapGetters('questions', ['resultTest', 'loadContent'])
     },
     created() {
         const { id } = this.$route.params;

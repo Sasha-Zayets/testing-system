@@ -3,11 +3,13 @@ import axios from '@/plugins/axios';
 const state = {
     listTest: [],
     resultTest: [],
+    loadContent: false,
 }
 
 const getters = {
     listTest: state => state.listTest,
     resultTest: state => state.resultTest,
+    loadContent: state => state.loadContent,
 }
 
 const mutations = {
@@ -23,6 +25,9 @@ const mutations = {
     },
     setResultTest(state, payload) {
         state.resultTest = payload;
+    },
+    setLoadContent(state, payload) {
+        state.loadContent = payload;
     }
 }
 
@@ -54,6 +59,8 @@ const actions = {
     },
     async allQuestions({ commit, rootState }) {
         try {
+            commit('setLoadContent', true);
+
             const { token } = rootState.auth;
             const result = await axios.post('/api/all-test/', {
                 token
@@ -61,9 +68,11 @@ const actions = {
 
             if(result.status === 200) {
                 commit('setListTest', result.data);
+                commit('setLoadContent', false);
             }
         } catch(error) {
             console.log(error);
+            commit('setLoadContent', false);
         }
     },
     async removeQuestion({ commit, rootState }, idPost) {
@@ -96,13 +105,17 @@ const actions = {
     },
     async getResultTest({ commit }, id) {
         try {
+            commit('setLoadContent', true);
+
             const result = await axios.get(`/api/result-test/${id}`);
             
             if(result.status === 200) {
                 commit('setResultTest', result.data);
+                commit('setLoadContent', false);
             }
         } catch(error) {
             console.log(error);
+            commit('setLoadContent', false);
         }
     }
 }

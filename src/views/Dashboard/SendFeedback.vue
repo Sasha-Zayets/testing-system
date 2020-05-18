@@ -30,29 +30,36 @@
                             </v-btn>
                         </v-form>
                     </v-card>
-                    <v-card class="pa-2 mt-2" v-if="reviews && reviews.length > 0">
-                        <h2 class="headline mb-2">Останні відгуки:</h2>
-                        <v-list three-line>
-                            <template v-for="(item, index) in reviews">
-                                <v-list-item
-                                    v-if="item.showOnSite === true"
-                                    :key="index"
-                                    >
-                                    <v-list-item-avatar>
-                                        <v-img 
-                                            src="https://image.flaticon.com/icons/svg/1738/1738691.svg"
-                                            ></v-img>
-                                    </v-list-item-avatar>
-
-                                    <v-list-item-content>
-                                        <v-list-item-title v-html="item.name"></v-list-item-title>
-                                        <v-list-item-subtitle v-html="item.description"></v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </template>
-                        </v-list>
-                    </v-card>
-                    <h2 class="heading" v-else>Відгуків немає :(</h2>
+                    <v-progress-circular
+                        :size="80"
+                        v-if="loading"
+                        color="primary"
+                        indeterminate
+                        ></v-progress-circular>
+                    <template v-else>
+                        <v-card class="pa-2 mt-2" v-if="reviews && reviews.length > 0">
+                            <h2 class="headline mb-2">Останні відгуки:</h2>
+                            <v-list three-line>
+                                <template v-for="(item, index) in reviews">
+                                    <v-list-item
+                                        v-if="item.showOnSite === true"
+                                        :key="index"
+                                        >
+                                        <v-list-item-avatar>
+                                            <v-img 
+                                                src="https://image.flaticon.com/icons/svg/1738/1738691.svg"
+                                                ></v-img>
+                                        </v-list-item-avatar>
+                                        <v-list-item-content>
+                                            <v-list-item-title v-html="item.name"></v-list-item-title>
+                                            <v-list-item-subtitle v-html="item.description"></v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                </template>
+                            </v-list>
+                        </v-card>
+                        <h2 class="heading" v-else>Відгуків немає :(</h2>
+                    </template>
                 </v-col>
             </v-row>
         </v-col>
@@ -75,7 +82,7 @@ export default {
         }
     }),
     computed: {
-        ...mapGetters('reviews', ['reviews']),
+        ...mapGetters('reviews', ['reviews', 'loading']),
     },
     created() {
         this.getReviews();

@@ -2,7 +2,16 @@
     <v-row>
         <v-col md="8">
             <title-dashboard>Налаштування</title-dashboard>
-            <v-card class="pa-2">
+            <v-progress-linear
+                v-if="loadContent"
+                indeterminate
+                color="primary"
+                class="mt-3"
+                ></v-progress-linear>
+            <v-card 
+                v-else
+                class="pa-2"
+                >
                 <v-row>
                     <v-col md="6" class="justify-center align-center d-flex">
                         <v-avatar
@@ -44,7 +53,11 @@ import TitleDashboard from '@/components/TitleDashboard';
 
 export default {
     computed: {
-        ...mapGetters('settings', ['settings', 'loading']),
+        ...mapGetters('settings', [
+            'settings', 
+            'loading',
+            'loadContent'
+        ]),
     },
     created() {
         this.getSettings();

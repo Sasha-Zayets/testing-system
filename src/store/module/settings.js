@@ -6,12 +6,14 @@ const state = {
         lastName: '',
         descriptions: ''
     },
-    loading: false
+    loading: false,
+    loadContent: false
 }
 
 const getters = {
     settings: state => state.settings,
     loading: state => state.loading,
+    loadContent: state => state.loadContent,
 }
 
 const mutations = {
@@ -22,12 +24,17 @@ const mutations = {
     },
     setLoading(state, payload) { 
         state.loading = payload;
+    },
+    setLoadContent(state, payload) {
+        state.loadContent = payload;
     }
 }
 
 const actions = {
     async getSettings({ commit, rootState }) {
         try {
+            commit('setLoadContent', true);
+
             const { token } = rootState.auth;
             const result = await axios.post('/api/all-settings/', {
                 token
@@ -35,10 +42,12 @@ const actions = {
             
             if(result.status === 200) {
                 commit('setSettings', result.data);
+                commit('setLoadContent', false);
             } else {
                 throw result.message;
             }
         } catch(error) {
+            commit('setLoadContent', false);
             commit('global/setSnackbarOptions', {
                 type: 'error',
                 show: true,

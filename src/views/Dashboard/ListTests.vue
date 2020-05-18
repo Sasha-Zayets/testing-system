@@ -2,7 +2,16 @@
     <v-row>
         <v-col sm="8">
             <title-dashboard>Список тестів</title-dashboard>
-            <v-card class="pa-2">
+            <v-progress-linear
+                v-if="loadContent"
+                indeterminate
+                color="primary"
+                class="mt-3"
+                ></v-progress-linear>
+            <v-card 
+                v-else
+                class="pa-2"
+                >
                 <v-list 
                     v-if="listTest.length > 0"
                     two-line 
@@ -112,7 +121,7 @@ export default {
         show: false
     }),
     computed: {
-        ...mapGetters('questions', ['listTest'])
+        ...mapGetters('questions', ['listTest', 'loadContent'])
     },
     created() {
         this.allQuestions();
